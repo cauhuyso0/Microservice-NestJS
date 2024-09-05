@@ -9,6 +9,7 @@ async function bootstrap() {
     options: {
       port: 3004,
     },
+    logger: ['error', 'warn'],
   });
   await app.listen();
 }

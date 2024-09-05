@@ -16,7 +16,7 @@
     "dev-user": "nest start --watch user",
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "concurrently -c \"cyan.bold,red.bold,orange.bold,green.bold,yellow.bold\" \"npm:dev-*\" ",
+    "start:dev": "concurrently -c \"cyan.bold,red.bold,blue.bold,green.bold,yellow.bold\" \"npm:dev-*\" ",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest",
@@ -30,6 +30,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/microservices": "^10.4.1",
     "@nestjs/platform-express": "^10.0.0",
+    "moment": "^2.30.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
