@@ -1,32 +1,4 @@
 {
-  "singleQuote": true,
-  "trailingComma": "all",
-  "endOfLine": "auto",
-  "tabWidth": 2,
-  "printWidth": 100,
-  "jsxBracketSameLine": true,
-  "semi": true,
-  "importOrder": [
-    "^@nestjs/(.*)$",
-    "<THIRD_PARTY_MODULES>",
-    "^@prisma/(.*)$",
-    "^@config",
-    "^@abstracts",
-    "^@database",
-    "^@common",
-    "^@*/(.*)$",
-    "^[../]",
-    "^[./]",
-    "^@type",
-    "^@utilities"
-  ],
-  "importOrderSeparation": true,
-  "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrderSortSpecifiers": true,
-  "importOrderParserPlugins": [
-    "typescript",
-    "classProperties",
-    "decorators-legacy"
-  ],
-  "importOrderCaseInsensitive": true
+  "$schema": "http://json.schemastore.org/prettierrc",
+  "singleQuote": true
 }
