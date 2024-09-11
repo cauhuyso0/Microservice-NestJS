@@ -10,7 +10,10 @@
     "sourceMap": true,
     "paths": {
       "apps/*": ["./apps/*"],
-      "libs/*": ["./libs/*"]
+      "@ecommerce-utilities": ["libs/ecommerce-utilities/src/index.ts"],
+      "libs/*": ["./libs/*"],
+      "prisma-order": ["libs/prisma-order/src/index.ts"],
+      "prisma-user": ["libs/prisma-user/src/index.ts"]
     },
     "outDir": "./dist",
     "resolveJsonModule": true,
