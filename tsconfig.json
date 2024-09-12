@@ -9,11 +9,12 @@
     "target": "ES2021",
     "sourceMap": true,
     "paths": {
-      "apps/*": ["./apps/*"],
       "@ecommerce-utilities": ["libs/ecommerce-utilities/src/index.ts"],
-      "libs/*": ["./libs/*"],
-      "prisma-order": ["libs/prisma-order/src/index.ts"],
-      "prisma-user": ["libs/prisma-user/src/index.ts"]
+      "@prisma-order": ["libs/prisma-order/src/index.ts"],
+      "@prisma-user": ["libs/prisma-user/src/index.ts"],
+      "apps/*": ["./apps/*"],
+      "ecommerce-logger": ["libs/ecommerce-logger/src/index.ts"],
+      "libs/*": ["./libs/*"]
     },
     "outDir": "./dist",
     "resolveJsonModule": true,
@@ -24,6 +25,8 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "skipDefaultLibCheck": true
+  },
+  "exclude": ["node_modules", "tmp"]
 }

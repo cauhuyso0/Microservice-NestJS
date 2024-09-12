@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client/user';
+import { Prisma, PrismaClientService } from '@prisma-user';
 import {
   Operation,
   GetResult as PrismaGetResult,
@@ -32,12 +32,12 @@ export type ModelName = Prisma.ModelName;
 
 /* Prisma model methods */
 export type PrismaModelMethods<T extends ModelName> =
-  keyof PrismaClient[Uncapitalize<T> extends keyof PrismaClient
+  keyof PrismaClientService[Uncapitalize<T> extends keyof PrismaClientService
     ? Uncapitalize<T>
     : never];
 
 type PrismaModelMethod<T extends ModelName> = {
-  [K in PrismaModelMethods<T>]: PrismaClient[Uncapitalize<T> extends keyof PrismaClient
+  [K in PrismaModelMethods<T>]: PrismaClientService[Uncapitalize<T> extends keyof PrismaClientService
     ? Uncapitalize<T>
     : never][K];
 };
