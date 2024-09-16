@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 // import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
-import { UserModule } from './user.module';
+import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(UserModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     logger: ['error', 'warn'],
   });
@@ -20,6 +20,8 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
+  const db = configService.get('DB_URL');
+  console.log(`server user listen on port ${db}`);
   await app.listen(port, () => {
     console.log(`server user listen on port ${port}`);
   });
