@@ -51,6 +51,33 @@
       "compilerOptions": {
         "tsConfigPath": "apps/notification/tsconfig.app.json"
       }
+    },
+    "prisma-user": {
+      "type": "library",
+      "root": "libs/prisma-user",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma-user/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma-user/tsconfig.lib.json"
+      }
+    },
+    "prisma-order": {
+      "type": "library",
+      "root": "libs/prisma-order",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma-order/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma-order/tsconfig.lib.json"
+      }
+    },
+    "ecommerce-utilities": {
+      "type": "library",
+      "root": "libs/ecommerce-utilities",
+      "entryFile": "index",
+      "sourceRoot": "libs/ecommerce-utilities/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/ecommerce-utilities/tsconfig.lib.json"
+      }
     }
   }
 }

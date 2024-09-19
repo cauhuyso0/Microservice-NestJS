@@ -1,0 +1,84 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_USER_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+  output          = "../../../node_modules/@prisma/db-user"
+}
+
+// generator nestjsDto {
+//   provider                        = "prisma-generator-nestjs-dto"
+//   output                          = "../src/generated/nestjs-dto"
+//   outputToNestJsResourceStructure = "false"
+//   exportRelationModifierClasses   = "true"
+//   reExport                        = "false"
+//   createDtoPrefix                 = "Create"
+//   updateDtoPrefix                 = "Update"
+//   dtoSuffix                       = "Dto"
+//   entityPrefix                    = ""
+//   entitySuffix                    = ""
+//   fileNamingStyle                 = "camel"
+// }
+
+generator prismaClassGenerator {
+  provider   = "prisma-class-generator"
+  output     = "../src/generated"
+  useSwagger = true
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  name      String?
+  password  String?
+  status    UserStatus @default(INACTIVE)
+  verify    Boolean    @default(false)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+
+  @@map("user")
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  permissions Permission[]
+
+  @@map("role")
+}
+
+model Permission {
+  id          Int       @id @default(autoincrement()) @map("id")
+  value       String    @unique @map("value") @db.VarChar(45)
+  name        String?   @map("name") @db.VarChar(45)
+  description String?   @map("description") @db.VarChar(100)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  roles       Role[]
+
+  @@map("permission")
+}
+
+model KeyToken {
+  userId        Int       @id @map("id")
+  publicKey     String    @map("public_key")
+  refreshTokens Json      @default("[]") @map("refresh_tokens") @db.Json
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@map("key_token")
+}

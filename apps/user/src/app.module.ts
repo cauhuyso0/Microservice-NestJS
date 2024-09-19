@@ -2,18 +2,15 @@ import { Module } from '@nestjs/common';
 
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
-// import { PrismaClientUserModule } from '@prisma-user';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: './apps/user/.env',
+      isGlobal: true,
     }),
-    // PrismaClientUserModule.register({
-    //   datasourceUrl: process.env.DB_URL,
-    //   timeReconnect: 1000,
-    //   dbName: 'Postgres User',
-    // }),
+    DatabaseModule.register(),
     AuthModule,
   ],
   controllers: [],

@@ -4,6 +4,22 @@
     "datasource",
     "ecommerce",
     "proto",
-    "Uncapitalize"
-  ]
+    "Uncapitalize",
+    "vegardit"
+  ],
+  "[javascript]": {
+    "editor.autoIndent": "keep"
+  },
+  "[yaml]": {
+    "editor.autoIndent": "advanced"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "editor.formatOnSave": true,
+  "typescript.referencesCodeLens.enabled": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": "always",
+    "source.fixAll.eslint": "always"
+  }
 }

@@ -6,10 +6,12 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
-    "format": "prettier --write \"{src,apps,libs,test}/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "generate-multi": "nx run-many --target generate-types",
+    "prisma:migrate:user": "prisma migrate dev --schema libs/prisma-user/prisma/schema.prisma",
+    "prisma:migrate:order": "prisma migrate dev --schema libs/prisma-order/prisma/schema.prisma",
+    "prisma:migrate": "npm run prisma:migrate:user && npm run prisma:migrate:order",
+    "prisma:generate:user": "prisma generate --schema libs/prisma-user/prisma/schema.prisma",
+    "prisma:generate:order": "prisma generate --schema libs/prisma-order/prisma/schema.prisma",
+    "prisma:generate": "npm run prisma:generate:user && npm run prisma:generate:order",
     "dev-notification": "nest start --watch notification",
     "dev-order": "nest start --watch order",
     "dev-payment": "nest start --watch payment",
@@ -17,14 +19,17 @@
     "dev-user": "nest start --watch user",
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "npm run generate-multi && concurrently -c \"cyan.bold,red.bold,blue.bold,green.bold,yellow.bold\" \"npm:dev-*\" ",
+    "start:dev": "npm run prisma:generate && concurrently -c \"cyan.bold,red.bold,blue.bold,green.bold,yellow.bold\" \"npm:dev-*\" ",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
+    "format": "prettier --write \"apps/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.11.1",
@@ -32,11 +37,16 @@
     "@nestjs/common": "^10.0.2",
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.2",
+    "@nestjs/jwt": "^10.2.0",
     "@nestjs/microservices": "^10.4.1",
+    "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/swagger": "^7.4.0",
     "@prisma/client": "^5.19.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "moment": "^2.30.1",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.3.0"
@@ -50,9 +60,11 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.3.1",
+    "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
+    "@vegardit/prisma-generator-nestjs-dto": "^1.5.1",
     "concurrently": "^8.2.2",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
@@ -62,6 +74,7 @@
     "jest-environment-node": "^29.7.0",
     "prettier": "^3.0.0",
     "prisma": "^5.19.1",
+    "prisma-class-generator": "^0.2.11",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.0",
@@ -76,7 +89,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -84,7 +97,16 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/prisma-user(|/.*)$": "<rootDir>/libs/prisma-user/src/$1",
+      "^@app/prisma-order(|/.*)$": "<rootDir>/libs/prisma-order/src/$1",
+      "^@app/ecommerce-utilities(|/.*)$": "<rootDir>/libs/ecommerce-utilities/src/$1"
+    }
   }
 }

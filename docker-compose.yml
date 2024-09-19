@@ -28,7 +28,7 @@ services:
       - '3306:3306'
     volumes:
       - mysql:/var/lib/mysql
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   mongodb:
     image: mongo:latest
@@ -42,8 +42,8 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ./docker/mongodb_data:/data/db
-      - ./docker/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - ./docker/mongodb/mongodb_data:/data/db
+      - ./docker/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
 
 volumes:
   postgres:
