@@ -51,6 +51,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/notification/tsconfig.app.json"
       }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth_microservice",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth_microservice/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth_microservice/tsconfig.app.json"
+      }
     }
   }
 }

@@ -1,8 +1,7 @@
+// src/notification/main.ts
 import { NestFactory } from '@nestjs/core';
-// import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { NestExpressApplication } from '@nestjs/platform-express';
-
 import { NotificationModule } from './notification.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-
-import { PaymentController } from './payment.controller';
-import { PaymentService } from './payment.service';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule } from '@nestjs/config';
+import { Partitioners } from 'kafkajs';
 
 @Module({
   imports: [
@@ -16,17 +15,15 @@ import { ConfigModule } from '@nestjs/config';
             clientId: 'auth',
             brokers: ['localhost:9092'],
           },
+          producerOnlyMode: true,
           consumer: {
             groupId: 'auth-consumer',
           },
         },
       },
     ]),
-    ConfigModule.forRoot({
-      envFilePath: './apps/payment/.env',
-    }),
   ],
-  controllers: [PaymentController],
-  providers: [PaymentService],
+  controllers: [AuthController],
+  providers: [AuthService],
 })
-export class PaymentModule {}
+export class AuthModule {}

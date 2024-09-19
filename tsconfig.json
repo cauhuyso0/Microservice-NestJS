@@ -10,7 +10,9 @@
     "sourceMap": true,
     "paths": {
       "apps/*": ["./apps/*"],
-      "libs/*": ["./libs/*"]
+      "libs/*": ["./libs/*"],
+      "@nestjs-microservices/shared/dto": ["apps/libs/shared/src/lib/dto"],
+      "@nestjs-microservices/shared/entities": ["apps/libs/shared/src/lib/entities"]
     },
     "outDir": "./dist",
     "resolveJsonModule": true,
