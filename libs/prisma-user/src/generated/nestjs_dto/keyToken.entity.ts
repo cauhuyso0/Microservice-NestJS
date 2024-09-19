@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/db-user';
 
-export class KeyToken {
+export class KeyTokenEntity {
   userId: number;
   publicKey: string;
   refreshTokens: Prisma.JsonValue;

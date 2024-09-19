@@ -1,6 +1,6 @@
-import { Role } from './role.entity';
+import { RoleEntity } from './role.entity';
 
-export class Permission {
+export class PermissionEntity {
   id: number;
   value: string;
   name: string | null;
@@ -8,5 +8,5 @@ export class Permission {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  roles?: Role[];
+  roles?: RoleEntity[];
 }

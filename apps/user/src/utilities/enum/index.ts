@@ -14,3 +14,12 @@ export enum CONFIGURATION {
   // connection string prisma
   DB_URL = 'DB_URL',
 }
+
+export enum E_OMIT_DEFAULT {
+  id = 'id',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+  deletedAt = 'deletedAt',
+}
+
+export const OMIT_DEFAULT = Object.values(E_OMIT_DEFAULT);

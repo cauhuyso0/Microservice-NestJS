@@ -9,24 +9,23 @@ generator client {
   output          = "../../../node_modules/@prisma/db-user"
 }
 
-// generator nestjsDto {
-//   provider                        = "prisma-generator-nestjs-dto"
-//   output                          = "../src/generated/nestjs-dto"
-//   outputToNestJsResourceStructure = "false"
-//   exportRelationModifierClasses   = "true"
-//   reExport                        = "false"
-//   createDtoPrefix                 = "Create"
-//   updateDtoPrefix                 = "Update"
-//   dtoSuffix                       = "Dto"
-//   entityPrefix                    = ""
-//   entitySuffix                    = ""
-//   fileNamingStyle                 = "camel"
-// }
+generator class_validator {
+  provider = "prisma-class-validator-generator"
+  output   = "../src/generated"
+}
 
-generator prismaClassGenerator {
-  provider   = "prisma-class-generator"
-  output     = "../src/generated"
-  useSwagger = true
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/generated/nestjs-dto"
+  outputToNestJsResourceStructure = "false"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "false"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  fileNamingStyle                 = "camel"
 }
 
 enum UserStatus {

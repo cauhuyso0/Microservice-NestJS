@@ -1,6 +1,6 @@
 import { UserStatus } from '@prisma/db-user';
 
-export class User {
+export class UserEntity {
   id: number;
   email: string;
   name: string | null;
