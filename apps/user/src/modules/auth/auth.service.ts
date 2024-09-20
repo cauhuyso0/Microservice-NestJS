@@ -33,7 +33,7 @@ export class AuthService {
     const { accessToken, privateKey, publicKey } = this.genAccessToken(user);
     const { refreshToken } = this.genRefreshToken(user.id, privateKey);
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, publicKey };
   }
 
   private genAccessToken(user: GenAccessTokenInput) {
