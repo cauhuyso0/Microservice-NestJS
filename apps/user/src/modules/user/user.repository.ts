@@ -3,12 +3,16 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { AbstractRepository } from '../../abstract';
 
 import { PrismaClientService } from '@lib/prisma-user';
-import { ERRORS_DICTIONARY, MODEL_NAME } from '../../utilities';
+import {
+  ERRORS_DICTIONARY,
+  MODEL_NAME,
+  REPOSITORY_NAME,
+} from '../../utilities';
 
 @Injectable()
 export class UserRepository extends AbstractRepository<MODEL_NAME.USER> {
   constructor(prismaService: PrismaClientService) {
-    super(prismaService);
+    super(REPOSITORY_NAME.USER, prismaService);
   }
   async getUserToGeneratePassport(id?: number, username?: string) {
     if (!id && !username)

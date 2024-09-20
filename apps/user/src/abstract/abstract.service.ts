@@ -7,7 +7,7 @@ export abstract class AbstractService<
   M extends ModelName,
   T extends AbstractRepository<M>,
 > {
-  constructor(public readonly repository: T) {}
+  constructor(private readonly repository: T) {}
   findUnique<A extends ModelArgs<M, 'findUnique'>>(
     args: Prisma.SelectSubset<A, ModelArgs<M, 'findUnique'>>,
   ) {
@@ -78,5 +78,13 @@ export abstract class AbstractService<
     args: Prisma.SelectSubset<A, ModelArgs<M, 'upsert'>>,
   ) {
     return this.repository.upsert(args);
+  }
+
+  exists<A extends ModelArgs<M, 'findFirst'>>(
+    args: Prisma.SelectSubset<A, ModelArgs<M, 'findFirst'>>,
+    throwCase?: 'IF_EXISTS' | 'IF_NOT_EXISTS',
+    message?: string,
+  ) {
+    return this.repository.exists(args, throwCase, message);
   }
 }

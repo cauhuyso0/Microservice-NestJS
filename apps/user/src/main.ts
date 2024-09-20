@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
+import * as compression from 'compression';
 
 import {
   APPS_NAME,
@@ -11,13 +12,18 @@ import {
   CONFIGURATION,
   configSwagger,
   ROUTES,
+  HttpExceptionFilter,
+  logStartApp,
+  LoggingInterceptor,
 } from './utilities';
 import * as moment from 'moment';
+import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
-    logger: ['error', 'warn'],
+    logger: ['error', 'warn', 'debug'],
   });
 
   // app.connectMicroservice<MicroserviceOptions>({
@@ -28,25 +34,35 @@ async function bootstrap() {
   await app.startAllMicroservices();
 
   const configService = app.get(ConfigService);
+
+  app.use(compression());
+
+  app.use(helmet());
+
   const port = configService.get<string>(CONFIGURATION.PORT);
   const nodeEnv = configService.get<string>(CONFIGURATION.NODE_ENV);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      skipMissingProperties: true,
+    }),
+  );
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter(nodeEnv));
 
   configSwagger(app, APPS_VERSION, APPS_NAME.USER, ROUTES.USER.API_DOC);
 
   await app.listen(port, async () => {
     const host = await app.getUrl();
-    console.info(
-      'Server \x1b[34m%s\x1b[0m version \x1b[34m%s\x1b[0m running at \x1b[34m%s\x1b[0m in \x1b[31m%s\x1b[0m mode!',
-      APPS_NAME.USER,
-      APPS_VERSION,
-      host,
-      nodeEnv,
-      moment().format('YYYY-MM-DD HH:mm:ss'),
-    );
-    console.info(
-      '\x1b[31mAPI Documents\x1b[0m is running at \x1b[34m%s\x1b[0m',
-      `${host}/${ROUTES.USER.API_DOC}`,
-    );
+    logStartApp({
+      appName: APPS_NAME.USER,
+      version: APPS_VERSION,
+      host: host,
+      env: nodeEnv,
+      timeString: moment().format('YYYY-MM-DD HH:mm:ss'),
+      apiDocsUrl: `${host}/${ROUTES.USER.API_DOC}`,
+    });
   });
 }
 bootstrap();

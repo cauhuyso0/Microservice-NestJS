@@ -5,7 +5,7 @@ import {
   IsDate,
   IsOptional,
 } from 'class-validator';
-import { Permission } from './';
+import { Permission } from './Permission.model';
 
 export class Role {
   @IsDefined()

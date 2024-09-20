@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/db-user';
 import {
   IsInt,
   IsDefined,

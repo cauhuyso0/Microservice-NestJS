@@ -1,12 +1,18 @@
 import { PrismaUserModule } from '@lib/prisma-user';
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CONFIGURATION } from '../utilities/enum';
 
 @Module({})
 export class DatabaseModule {
   static register(): DynamicModule {
     const configService = new ConfigService();
-    const uri = `postgresql://${configService.get('DB_USERNAME')}:${configService.get('DB_PASSWORD')}@${configService.get('DB_HOST')}:${configService.get('DB_PORT')}/${configService.get('DB_DATABASE')}`;
+    const dbUserName = configService.get<string>(CONFIGURATION.DB_USERNAME);
+    const dbPassword = configService.get<string>(CONFIGURATION.DB_PASSWORD);
+    const dbHost = configService.get<string>(CONFIGURATION.DB_HOST);
+    const dbPort = configService.get<string>(CONFIGURATION.DB_PORT);
+    const dbDatabase = configService.get<string>(CONFIGURATION.DB_DATABASE);
+    const uri = `postgresql://${dbUserName}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
     return {
       global: true,
       module: DatabaseModule,

@@ -9,24 +9,24 @@ generator client {
   output          = "../../../node_modules/@prisma/db-user"
 }
 
-generator class_validator {
-  provider = "prisma-class-validator-generator"
-  output   = "../src/generated"
-}
+// generator class_validator {
+//   provider = "prisma-class-validator-generator"
+//   output   = "../src/generated"
+// }
 
-generator nestjsDto {
-  provider                        = "prisma-generator-nestjs-dto"
-  output                          = "../src/generated/nestjs-dto"
-  outputToNestJsResourceStructure = "false"
-  exportRelationModifierClasses   = "true"
-  reExport                        = "false"
-  createDtoPrefix                 = "Create"
-  updateDtoPrefix                 = "Update"
-  dtoSuffix                       = "Dto"
-  entityPrefix                    = ""
-  entitySuffix                    = ""
-  fileNamingStyle                 = "camel"
-}
+// generator nestjsDto {
+//   provider                        = "prisma-generator-nestjs-dto"
+//   output                          = "../src/generated/nestjs-dto"
+//   outputToNestJsResourceStructure = "false"
+//   exportRelationModifierClasses   = "true"
+//   reExport                        = "false"
+//   createDtoPrefix                 = "Create"
+//   updateDtoPrefix                 = "Update"
+//   dtoSuffix                       = "Dto"
+//   entityPrefix                    = ""
+//   entitySuffix                    = ""
+//   fileNamingStyle                 = "camel"
+// }
 
 enum UserStatus {
   ACTIVE
@@ -44,16 +44,20 @@ model User {
   updatedAt DateTime   @updatedAt @map("updated_at")
   deletedAt DateTime?  @map("deleted_at")
 
+  roles Role[]
+
   @@map("user")
 }
 
 model Role {
-  id          Int          @id @default(autoincrement())
-  name        String
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  deletedAt   DateTime?    @map("deleted_at")
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+
   permissions Permission[]
+  users       User[]
 
   @@map("role")
 }
@@ -63,9 +67,9 @@ model Permission {
   value       String    @unique @map("value") @db.VarChar(45)
   name        String?   @map("name") @db.VarChar(45)
   description String?   @map("description") @db.VarChar(100)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(3)
   roles       Role[]
 
   @@map("permission")
@@ -75,9 +79,9 @@ model KeyToken {
   userId        Int       @id @map("id")
   publicKey     String    @map("public_key")
   refreshTokens Json      @default("[]") @map("refresh_tokens") @db.Json
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  deletedAt     DateTime? @map("deleted_at")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz(3)
 
   @@map("key_token")
 }

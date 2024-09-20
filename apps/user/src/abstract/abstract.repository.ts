@@ -6,12 +6,18 @@ import {
   ModelName,
   ModelResult,
 } from './abstract.repository.interface';
+import { NotFoundException } from '@nestjs/common';
 
 export class AbstractRepository<M extends ModelName>
   implements IAbstractRepository<M>
 {
   private readonly _model: Uncapitalize<M>;
-  constructor(private readonly _prismaService: PrismaClient) {}
+  constructor(
+    modelName: Uncapitalize<M>,
+    private readonly _prismaService: PrismaClient,
+  ) {
+    this._model = modelName;
+  }
 
   findUnique<A extends ModelArgs<M, 'findUnique'>>(
     args: Prisma.SelectSubset<A, ModelArgs<M, 'findUnique'>>,
@@ -100,5 +106,41 @@ export class AbstractRepository<M extends ModelName>
     args: Prisma.SelectSubset<A, ModelArgs<M, 'upsert'>>,
   ): Promise<ModelResult<M, A, 'upsert'>> {
     return this._prismaService[this._model as Prisma.ModelName].upsert(args);
+  }
+
+  async exists<A extends ModelArgs<M, 'findFirst'>>(
+    args: Prisma.SelectSubset<A, ModelArgs<M, 'findFirst'>>,
+    throwCase?: 'IF_EXISTS' | 'IF_NOT_EXISTS',
+    message?: string,
+  ) {
+    const findFirstQuery: any = args;
+    if (args) {
+      findFirstQuery.select = {
+        id: true,
+      };
+    }
+    const isExists =
+      await this._prismaService[this._model as Prisma.ModelName].findFirst(
+        findFirstQuery,
+      );
+    switch (throwCase) {
+      case 'IF_EXISTS':
+        if (isExists) {
+          throw new NotFoundException({
+            kind: 'existed',
+            message: message || `${this._model} already exists`,
+          });
+        }
+        break;
+      case 'IF_NOT_EXISTS':
+        if (!isExists) {
+          throw new NotFoundException({
+            kind: 'not.existed',
+            message: message || `${this._model} is not exists`,
+          });
+        }
+      default:
+        return !!isExists;
+    }
   }
 }
