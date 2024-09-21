@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
 import { AbstractService } from '../../abstract';
 
@@ -8,7 +8,7 @@ import { MODEL_NAME } from '../../utilities';
 import { SignUpInput } from './types';
 import { AuthService } from '../auth/auth.service';
 
-import * as Bcrypt from 'bcrypt';
+import { hashBySalt } from '@apps/user/utilities';
 
 @Injectable()
 export class UserService extends AbstractService<
@@ -17,6 +17,7 @@ export class UserService extends AbstractService<
 > {
   constructor(
     userRepository: UserRepository,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
   ) {
     super(userRepository);
@@ -32,23 +33,29 @@ export class UserService extends AbstractService<
       'IF_EXISTS',
     );
 
-    const saltPassword = await Bcrypt.genSalt(10);
-    const hashPassword = await Bcrypt.hash(signUpInfo.password, saltPassword);
+    const { hashed } = await hashBySalt(signUpInfo.password);
 
     const newUser = await this.create({
       data: {
         ...signUpInfo,
-        password: hashPassword,
+        password: hashed,
       },
+      // omit: {
+      //   password: true,
+      //   status: true,
+      //   verify: true,
+      // },
     });
 
     return {
       ...newUser,
       ...this.authService.genTokenSignUp(newUser),
-      password: undefined,
+      // password: undefined,
     };
   }
   // getUsersByRoleIds = this.repository.getUsersByRoleIds;
+
+  getUserByEmail = this.repository.getUserByEmail;
 
   // async getUserByUsername(username: string) {
   //   try {

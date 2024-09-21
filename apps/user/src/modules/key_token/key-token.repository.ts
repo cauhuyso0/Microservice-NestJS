@@ -11,6 +11,4 @@ export class KeyTokenRepository extends AbstractRepository<MODEL_NAME.KEY_TOKEN>
   constructor(prismaService: PrismaClientService) {
     super(REPOSITORY_NAME.KEY_TOKEN, prismaService);
   }
-
-  createKeyToken() {}
 }

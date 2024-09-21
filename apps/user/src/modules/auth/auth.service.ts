@@ -1,9 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { GenAccessTokenInput } from './types';
 import * as Crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
-import { CONFIGURATION } from '@apps/user/utilities';
+import {
+  compareHash,
+  CONFIGURATION,
+  ERRORS_DICTIONARY,
+} from '@apps/user/utilities';
 import { JwtService } from '@nestjs/jwt';
+import { KeyTokenService } from '../key_token/key-token.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +23,9 @@ export class AuthService {
 
   constructor(
     configService: ConfigService,
+    private readonly keyTokenService: KeyTokenService,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {
     this.JWTAccessTokenTimeToLive = configService.get<string>(
@@ -23,17 +37,33 @@ export class AuthService {
   }
 
   async getAuthenticatedUser(email: string, password: string) {
-    return {
-      email,
-      password,
-    };
+    const user = await this.userService.getUserByEmail(email);
+
+    const isMatchPassword = await compareHash(password, user.password);
+
+    if (!isMatchPassword) {
+      throw new BadRequestException(ERRORS_DICTIONARY.WRONG_CREDENTIALS);
+    }
+
+    return await this.genTokenSignUp(user);
   }
 
-  genTokenSignUp(user: GenAccessTokenInput) {
+  async genTokenSignUp(user: GenAccessTokenInput) {
     const { accessToken, privateKey, publicKey } = this.genAccessToken(user);
     const { refreshToken } = this.genRefreshToken(user.id, privateKey);
 
-    return { accessToken, refreshToken, publicKey };
+    const { clientId } = await this.keyTokenService.create({
+      data: {
+        userId: user.id,
+        refreshToken,
+        publicKey,
+      },
+      select: {
+        clientId: true,
+      },
+    });
+
+    return { accessToken, refreshToken, clientId };
   }
 
   private genAccessToken(user: GenAccessTokenInput) {

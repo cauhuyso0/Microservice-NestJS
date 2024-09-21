@@ -14,6 +14,20 @@ export class UserRepository extends AbstractRepository<MODEL_NAME.USER> {
   constructor(prismaService: PrismaClientService) {
     super(REPOSITORY_NAME.USER, prismaService);
   }
+
+  getUserByEmail(email: string) {
+    return this.findFirstOrThrow({
+      where: { email },
+      include: {
+        roles: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
+    });
+  }
+
   async getUserToGeneratePassport(id?: number, username?: string) {
     if (!id && !username)
       throw new BadRequestException(

@@ -12,6 +12,7 @@ interface Clients<
   User: Prisma.Prisma__UserClient<GetResult<T, A, O>, never>;
   Role: Prisma.Prisma__RoleClient<GetResult<T, A, O>, never>;
   Permission: Prisma.Prisma__PermissionClient<GetResult<T, A, O>, never>;
+  KeyToken: Prisma.Prisma__KeyTokenClient<GetResult<T, A, O>, never>;
 }
 
 type MethodsWithParams<T, M extends ModelName> = {
