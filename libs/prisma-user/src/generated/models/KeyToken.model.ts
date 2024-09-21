@@ -1,14 +1,18 @@
 import { Prisma } from '@prisma/db-user';
 import {
-  IsInt,
-  IsDefined,
   IsString,
+  IsDefined,
+  IsInt,
   IsDate,
   IsOptional,
 } from 'class-validator';
-import './';
+import { User } from './User.model';
 
 export class KeyToken {
+  @IsDefined()
+  @IsString()
+  clientId!: string;
+
   @IsDefined()
   @IsInt()
   userId!: number;
@@ -16,6 +20,10 @@ export class KeyToken {
   @IsDefined()
   @IsString()
   publicKey!: string;
+
+  @IsDefined()
+  @IsString()
+  refreshToken!: string;
 
   @IsDefined()
   refreshTokens!: Prisma.JsonValue;
@@ -31,4 +39,7 @@ export class KeyToken {
   @IsOptional()
   @IsDate()
   deletedAt?: Date;
+
+  @IsDefined()
+  user!: User;
 }

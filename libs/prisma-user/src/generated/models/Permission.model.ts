@@ -16,9 +16,9 @@ export class Permission {
   @IsString()
   value!: string;
 
-  @IsOptional()
+  @IsDefined()
   @IsString()
-  name?: string;
+  name!: string;
 
   @IsOptional()
   @IsString()

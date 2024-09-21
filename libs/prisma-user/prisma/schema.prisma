@@ -44,7 +44,8 @@ model User {
   updatedAt DateTime   @updatedAt @map("updated_at")
   deletedAt DateTime?  @map("deleted_at")
 
-  roles Role[]
+  roles    Role[]
+  KeyToken KeyToken[]
 
   @@map("user")
 }
@@ -65,7 +66,7 @@ model Role {
 model Permission {
   id          Int       @id @default(autoincrement()) @map("id")
   value       String    @unique @map("value") @db.VarChar(45)
-  name        String?   @map("name") @db.VarChar(45)
+  name        String    @map("name") @db.VarChar(45)
   description String?   @map("description") @db.VarChar(100)
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -76,12 +77,16 @@ model Permission {
 }
 
 model KeyToken {
-  userId        Int       @id @map("id")
+  clientId      String    @id @default(uuid()) @map("client_id")
+  userId        Int       @map("user_id")
   publicKey     String    @map("public_key")
+  refreshToken  String    @map("refresh_token") @db.Text
   refreshTokens Json      @default("[]") @map("refresh_tokens") @db.Json
   createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
   deletedAt     DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("key_token")
 }

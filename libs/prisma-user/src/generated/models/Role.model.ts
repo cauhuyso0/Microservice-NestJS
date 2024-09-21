@@ -6,6 +6,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Permission } from './Permission.model';
+import { User } from './User.model';
 
 export class Role {
   @IsDefined()
@@ -30,4 +31,7 @@ export class Role {
 
   @IsDefined()
   permissions!: Permission[];
+
+  @IsDefined()
+  users!: User[];
 }
