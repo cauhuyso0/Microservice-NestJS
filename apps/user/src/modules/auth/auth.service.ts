@@ -45,10 +45,10 @@ export class AuthService {
       throw new BadRequestException(ERRORS_DICTIONARY.WRONG_CREDENTIALS);
     }
 
-    return await this.genTokenSignUp(user);
+    return user;
   }
 
-  async genTokenSignUp(user: GenAccessTokenInput) {
+  async genTokenSignInAndSignUp(user: GenAccessTokenInput) {
     const { accessToken, privateKey, publicKey } = this.genAccessToken(user);
     const { refreshToken } = this.genRefreshToken(user.id, privateKey);
 
@@ -63,7 +63,7 @@ export class AuthService {
       },
     });
 
-    return { accessToken, refreshToken, clientId };
+    return { accessToken, refreshToken, clientId, user };
   }
 
   private genAccessToken(user: GenAccessTokenInput) {

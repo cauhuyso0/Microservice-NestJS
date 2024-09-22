@@ -5,6 +5,8 @@
     "dtos",
     "ecommerce",
     "proto",
+    "protobuf",
+    "protoc",
     "Uncapitalize",
     "vegardit"
   ],

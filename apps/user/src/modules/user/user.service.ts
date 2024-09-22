@@ -49,7 +49,7 @@ export class UserService extends AbstractService<
 
     return {
       ...newUser,
-      ...this.authService.genTokenSignUp(newUser),
+      ...this.authService.genTokenSignInAndSignUp(newUser),
       // password: undefined,
     };
   }

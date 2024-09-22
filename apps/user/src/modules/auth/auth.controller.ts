@@ -1,7 +1,18 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ROUTES } from '@apps/user/utilities';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ResponseAddDataToHeaderInterceptor,
+  ROUTES,
+} from '@apps/user/utilities';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from '@apps/user/common';
 
 const { ROUTE, TAG } = ROUTES.USER.AUTH;
@@ -11,9 +22,16 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post(ROUTE.SIGN_IN)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+  })
+  @UseInterceptors(ResponseAddDataToHeaderInterceptor)
   @UseGuards(LocalAuthGuard)
-  signIn(@Req() request: any) {
+  async signIn(@Req() request: any) {
     const { user } = request;
-    return { user };
+    const data = await this.authService.genTokenSignInAndSignUp(user);
+
+    return data;
   }
 }

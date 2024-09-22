@@ -19,6 +19,7 @@ import {
 import * as moment from 'moment';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -26,10 +27,13 @@ async function bootstrap() {
     logger: ['error', 'warn', 'debug'],
   });
 
-  // app.connectMicroservice<MicroserviceOptions>({
-  //   transport: Transport.GRPC,
-  //   options: { retryAttempts: 5, retryDelay: 3000 },
-  // });
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'user',
+      protoPath: 'proto/user.proto',
+    },
+  });
 
   await app.startAllMicroservices();
 
