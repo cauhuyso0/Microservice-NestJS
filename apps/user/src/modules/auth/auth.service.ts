@@ -3,8 +3,17 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { GenAccessTokenInput } from './types';
+import {
+  GenAccessTokenInput,
+  ValidateAccessTokenInput,
+  UserFullRelations,
+  RoleAccessToken,
+  PermissionAccessToken,
+  AccessTokenPayload,
+  GetPublicKeyRefreshInput,
+} from '@apps/user/types';
 import * as Crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -48,25 +57,63 @@ export class AuthService {
     return user;
   }
 
+  async validateAccessToken({ clientId, userId }: ValidateAccessTokenInput) {
+    const publicKey = await this.keyTokenService.getPublicKey({
+      clientId,
+      userId,
+    });
+
+    return publicKey;
+  }
+
+  async validateRefreshToken({
+    clientId,
+    userId,
+    refreshToken,
+  }: GetPublicKeyRefreshInput) {
+    const publicKeyRefresh = await this.keyTokenService.getPublicKeyRefresh({
+      clientId,
+      userId,
+      refreshToken,
+    });
+
+    return publicKeyRefresh;
+  }
+
+  async regenerateAccessToken(params: ValidateAccessTokenInput) {
+    const user = await this.userService.getUserId(params.userId);
+
+    if (!user)
+      throw new UnauthorizedException(
+        ERRORS_DICTIONARY.REFRESH_TOKEN_NOT_VALID,
+      );
+
+    const { accessToken, publicKey } = this.genAccessToken(user);
+
+    await this.keyTokenService.updateWhenRefreshAccessToken({
+      clientId: params.clientId,
+      publicKey,
+    });
+
+    return { accessToken };
+  }
+
   async genTokenSignInAndSignUp(user: GenAccessTokenInput) {
     const { accessToken, privateKey, publicKey } = this.genAccessToken(user);
     const { refreshToken } = this.genRefreshToken(user.id, privateKey);
 
-    const { clientId } = await this.keyTokenService.create({
-      data: {
-        userId: user.id,
-        refreshToken,
-        publicKey,
-      },
-      select: {
-        clientId: true,
-      },
+    delete user.password;
+
+    const clientId = await this.keyTokenService.createWhenSignIn({
+      userId: user.id,
+      refreshToken,
+      publicKey,
     });
 
     return { accessToken, refreshToken, clientId, user };
   }
 
-  private genAccessToken(user: GenAccessTokenInput) {
+  private genAccessToken(user: UserFullRelations) {
     const { privateKey, publicKey } = Crypto.generateKeyPairSync('rsa', {
       modulusLength: 4096,
       publicKeyEncoding: {
@@ -79,23 +126,11 @@ export class AuthService {
       },
     });
 
-    const accessToken = this.jwtService.sign(
-      {
-        data: {
-          userId: user.id,
-          email: user.email,
-          verify: user.verify,
-          status: user.status,
-          roles: user,
-          permissions: user,
-        },
-      },
-      {
-        privateKey: privateKey,
-        algorithm: 'RS256',
-        expiresIn: this.JWTAccessTokenTimeToLive,
-      },
-    );
+    const accessToken = this.jwtService.sign(this.getPayloadAccessToken(user), {
+      privateKey: privateKey,
+      algorithm: 'RS256',
+      expiresIn: this.JWTAccessTokenTimeToLive,
+    });
 
     return {
       privateKey,
@@ -121,5 +156,36 @@ export class AuthService {
     return {
       refreshToken,
     };
+  }
+
+  private getPayloadAccessToken(user: UserFullRelations) {
+    const roles: RoleAccessToken[] = [];
+    const permissions: PermissionAccessToken[] = [];
+
+    user.roles.forEach((role) => {
+      role.permissions.forEach((permission) => {
+        permissions.push({
+          id: permission.id,
+          name: permission.name,
+          value: permission.value,
+        });
+      });
+
+      roles.push({
+        id: role.id,
+        name: role.name,
+      });
+    });
+
+    const payload: AccessTokenPayload = {
+      userId: user.id,
+      email: user.email,
+      verify: user.verify,
+      status: user.status,
+      roles,
+      permissions,
+    };
+
+    return payload;
   }
 }

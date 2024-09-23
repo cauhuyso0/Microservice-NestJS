@@ -7,6 +7,8 @@ export class SignUpDto extends OmitType(UserDto, [
   ...OMIT_DEFAULT,
   'verify',
   'status',
+  'roles',
+  'keyTokens',
 ]) {
   @IsEmail()
   email: string;

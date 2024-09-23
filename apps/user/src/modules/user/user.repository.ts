@@ -28,6 +28,22 @@ export class UserRepository extends AbstractRepository<MODEL_NAME.USER> {
     });
   }
 
+  getUserId(id: number) {
+    return this.findFirstOrThrow({
+      omit: {
+        password: true,
+      },
+      where: { id },
+      include: {
+        roles: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
+    });
+  }
+
   async getUserToGeneratePassport(id?: number, username?: string) {
     if (!id && !username)
       throw new BadRequestException(

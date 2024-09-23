@@ -49,9 +49,9 @@ export class User {
   @IsDate()
   deletedAt?: Date;
 
-  @IsDefined()
+  @IsOptional()
   roles!: Role[];
 
-  @IsDefined()
-  KeyToken!: KeyToken[];
+  @IsOptional()
+  keyTokens!: KeyToken[];
 }

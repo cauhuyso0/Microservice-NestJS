@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AbstractController } from '../../abstract';
@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 
 import { MODEL_NAME, ROUTES } from '../../utilities';
 import { SignUpDto } from './dtos';
+import { JwtAccessTokenGuard } from '@apps/user/common';
 
 const { ROUTE, TAG } = ROUTES.USER.USER;
 @Controller()
@@ -22,6 +23,7 @@ export class UserController extends AbstractController<
   }
 
   @Get(ROUTE.BASE)
+  @UseGuards(JwtAccessTokenGuard)
   list() {
     return '';
   }
