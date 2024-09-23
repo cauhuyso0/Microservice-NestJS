@@ -23,6 +23,10 @@ export class KeyToken {
 
   @IsDefined()
   @IsString()
+  publicKeyRefresh!: string;
+
+  @IsDefined()
+  @IsString()
   refreshToken!: string;
 
   @IsDefined()

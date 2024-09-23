@@ -50,23 +50,10 @@ export class UserService extends AbstractService<
     return {
       ...newUser,
       ...this.authService.genTokenSignInAndSignUp(newUser),
-      // password: undefined,
     };
   }
-  // getUsersByRoleIds = this.repository.getUsersByRoleIds;
 
   getUserByEmail = this.repository.getUserByEmail;
 
-  // async getUserByUsername(username: string) {
-  //   try {
-  //     const user = await this.findFirst({
-  //       where: {
-  //         username,
-  //       },
-  //     });
-  //     return user;
-  //   } catch (error) {
-  //     throw new BadRequestException(error);
-  //   }
-  // }
+  getUserId = this.repository.getUserId;
 }

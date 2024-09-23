@@ -1,4 +1,5 @@
 import { UserStatus } from '@prisma/db-user';
+import { RoleEntity } from './role.entity';
 
 export class UserEntity {
   id: number;
@@ -10,4 +11,5 @@ export class UserEntity {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
+  roles?: RoleEntity[];
 }

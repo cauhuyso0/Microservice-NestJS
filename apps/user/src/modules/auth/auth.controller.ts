@@ -13,7 +13,7 @@ import {
   ROUTES,
 } from '@apps/user/utilities';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from '@apps/user/common';
+import { JwtRefreshTokenGuard, LocalAuthGuard } from '@apps/user/common';
 
 const { ROUTE, TAG } = ROUTES.USER.AUTH;
 @Controller()
@@ -31,6 +31,20 @@ export class AuthController {
   async signIn(@Req() request: any) {
     const { user } = request;
     const data = await this.authService.genTokenSignInAndSignUp(user);
+
+    return data;
+  }
+
+  @Post(ROUTE.REFRESH)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+  })
+  @UseInterceptors(ResponseAddDataToHeaderInterceptor)
+  @UseGuards(JwtRefreshTokenGuard)
+  async refreshToken(@Req() request: any) {
+    const { user } = request;
+    const data = await this.authService.regenerateAccessToken(user);
 
     return data;
   }

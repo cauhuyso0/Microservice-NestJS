@@ -14,4 +14,11 @@ export class KeyTokenService extends AbstractService<
   constructor(keyTokenRepository: KeyTokenRepository) {
     super(keyTokenRepository);
   }
+
+  getPublicKey = this.repository.getPublicKey;
+
+  createWhenSignIn = this.repository.createWhenSignIn;
+  updateWhenRefreshAccessToken = this.repository.updateWhenRefreshAccessToken;
+
+  getPublicKeyRefresh = this.repository.getPublicKeyRefresh;
 }
