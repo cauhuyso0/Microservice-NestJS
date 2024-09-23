@@ -1,17 +1,53 @@
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
-  output = "../../../node_modules/@prisma/client/order"
+  output          = "../../../node_modules/@prisma/db-order"
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  username String @unique
-  name  String?
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  name      String?
+  password  String?
+  status    UserStatus @default(INACTIVE)
+  verfify   Boolean    @default(false)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+
+  @@map("user")
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  permissions Permission[]
+
+  @@map("role")
+}
+
+model Permission {
+  id          Int       @id @default(autoincrement()) @map("id")
+  value       String    @unique @map("value") @db.VarChar(45)
+  name        String?   @map("name") @db.VarChar(45)
+  description String?   @map("description") @db.VarChar(100)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  roles       Role[]
+
+  @@map("permission")
 }

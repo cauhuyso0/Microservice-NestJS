@@ -1,3 +1,28 @@
 {
-  "cSpell.words": ["datasource", "ecommerce", "Uncapitalize"]
+  "cSpell.words": [
+    "commitlint",
+    "datasource",
+    "dtos",
+    "ecommerce",
+    "proto",
+    "protobuf",
+    "protoc",
+    "Uncapitalize",
+    "vegardit"
+  ],
+  "[javascript]": {
+    "editor.autoIndent": "keep"
+  },
+  "[yaml]": {
+    "editor.autoIndent": "advanced"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "editor.formatOnSave": true,
+  "typescript.referencesCodeLens.enabled": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": "always",
+    "source.fixAll.eslint": "always"
+  }
 }

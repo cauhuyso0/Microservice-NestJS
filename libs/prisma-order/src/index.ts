@@ -1,1 +1,2 @@
-export * from './lib/prisma-order';
+export * from './prisma-order.module';
+export * from './prisma-order.service';

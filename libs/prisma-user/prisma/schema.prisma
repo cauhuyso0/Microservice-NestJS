@@ -1,17 +1,92 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_USER_URL")
 }
 
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
-  output = "../../../node_modules/@prisma/client/user"
+  output          = "../../../node_modules/@prisma/db-user"
+}
+
+// generator class_validator {
+//   provider = "prisma-class-validator-generator"
+//   output   = "../src/generated"
+// }
+
+// generator nestjsDto {
+//   provider                        = "prisma-generator-nestjs-dto"
+//   output                          = "../src/generated/nestjs-dto"
+//   outputToNestJsResourceStructure = "false"
+//   exportRelationModifierClasses   = "true"
+//   reExport                        = "false"
+//   createDtoPrefix                 = "Create"
+//   updateDtoPrefix                 = "Update"
+//   dtoSuffix                       = "Dto"
+//   entityPrefix                    = ""
+//   entitySuffix                    = ""
+//   fileNamingStyle                 = "camel"
+// }
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  username String @unique
-  name  String?
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  name      String?
+  password  String?
+  status    UserStatus @default(INACTIVE)
+  verify    Boolean    @default(false)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+
+  roles    Role[]
+  KeyToken KeyToken[]
+
+  @@map("user")
+}
+
+model Role {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  permissions Permission[]
+  users       User[]
+
+  @@map("role")
+}
+
+model Permission {
+  id          Int       @id @default(autoincrement()) @map("id")
+  value       String    @unique @map("value") @db.VarChar(45)
+  name        String    @map("name") @db.VarChar(45)
+  description String?   @map("description") @db.VarChar(100)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(3)
+  roles       Role[]
+
+  @@map("permission")
+}
+
+model KeyToken {
+  clientId      String    @id @default(uuid()) @map("client_id")
+  userId        Int       @map("user_id")
+  publicKey     String    @map("public_key")
+  refreshToken  String    @map("refresh_token") @db.Text
+  refreshTokens Json      @default("[]") @map("refresh_tokens") @db.Json
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("key_token")
 }

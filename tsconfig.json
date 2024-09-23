@@ -6,17 +6,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
     "sourceMap": true,
-    "paths": {
-      "apps/*": ["./apps/*"],
-      "@ecommerce-utilities": ["libs/ecommerce-utilities/src/index.ts"],
-      "libs/*": ["./libs/*"],
-      "prisma-order": ["libs/prisma-order/src/index.ts"],
-      "prisma-user": ["libs/prisma-user/src/index.ts"]
-    },
     "outDir": "./dist",
-    "resolveJsonModule": true,
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -24,6 +15,25 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "target": "ES2023",
+    "paths": {
+      "@apps/user": ["apps/user/src"],
+      "@apps/user/*": ["apps/user/src/*"],
+      "@apps/product": ["apps/product/src"],
+      "@apps/product/*": ["apps/product/src/*"],
+      "@apps/payment": ["apps/payment/src"],
+      "@apps/payment/*": ["apps/payment/src/*"],
+      "@apps/order": ["apps/order/src"],
+      "@apps/order/*": ["apps/order/src/*"],
+      "@apps/notification": ["apps/notification/src"],
+      "@apps/notification/*": ["apps/notification/src/*"],
+      "@lib/prisma-user": ["libs/prisma-user/src"],
+      "@lib/prisma-user/*": ["libs/prisma-user/src/*"],
+      "@lib/prisma-order": ["libs/prisma-order/src"],
+      "@lib/prisma-order/*": ["libs/prisma-order/src/*"],
+      "@lib/ecommerce-utilities": ["libs/ecommerce-utilities/src"],
+      "@lib/ecommerce-utilities/*": ["libs/ecommerce-utilities/src/*"]
+    }
   }
 }

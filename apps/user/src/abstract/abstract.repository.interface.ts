@@ -1,15 +1,18 @@
-import { Prisma, PrismaClient } from '@prisma/client/user';
+import { Prisma, PrismaClient } from '@prisma/db-user';
 import {
   Operation,
   GetResult as PrismaGetResult,
-} from '@prisma/client/user/runtime/library';
+} from '@prisma/db-user/runtime/library';
 
 interface Clients<
   T extends ModelName,
   A extends ModelArgs<T, O>,
   O extends Operation,
 > {
-  user: Prisma.Prisma__UserClient<GetResult<T, A, O>, never>;
+  User: Prisma.Prisma__UserClient<GetResult<T, A, O>, never>;
+  Role: Prisma.Prisma__RoleClient<GetResult<T, A, O>, never>;
+  Permission: Prisma.Prisma__PermissionClient<GetResult<T, A, O>, never>;
+  KeyToken: Prisma.Prisma__KeyTokenClient<GetResult<T, A, O>, never>;
 }
 
 type MethodsWithParams<T, M extends ModelName> = {
