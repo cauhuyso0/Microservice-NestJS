@@ -27,17 +27,20 @@ async function bootstrap() {
     logger: ['error', 'warn', 'debug'],
   });
 
+  const configService = app.get(ConfigService);
+
+  const gRPCUrl = configService.get<string>(CONFIGURATION.GRPC_URL);
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
       package: 'user',
       protoPath: 'proto/user.proto',
+      url: gRPCUrl,
     },
   });
 
   await app.startAllMicroservices();
-
-  const configService = app.get(ConfigService);
 
   app.use(compression());
 

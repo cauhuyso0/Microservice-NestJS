@@ -15,6 +15,9 @@ export enum CONFIGURATION {
   // connection string prisma
   DB_URL = 'DB_URL',
 
+  // gRPC
+  GRPC_URL = 'GRPC_URL',
+
   // Authentication
   JWT_ACCESS_TOKEN_TIME_TO_LIVE = 'JWT_ACCESS_TOKEN_TIME_TO_LIVE',
   JWT_REFRESH_TOKEN_TIME_TO_LIVE = 'JWT_REFRESH_TOKEN_TIME_TO_LIVE',
