@@ -23,12 +23,12 @@
     "start": "nest start",
     "start:dev": "npm run prisma:generate && concurrently -c \"cyan.bold,red.bold,blue.bold,green.bold,yellow.bold\" \"npm:start:dev:*\" ",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/apps/microservice-nest-js/main",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --config ./apps/microservice-nest-js/test/jest-e2e.json",
     "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
@@ -43,7 +43,9 @@
     "@nestjs/microservices": "^10.4.3",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.2",
+    "@nestjs/platform-socket.io": "^10.4.4",
     "@nestjs/swagger": "^7.4.0",
+    "@nestjs/websockets": "^10.4.4",
     "@prisma/client": "^5.19.1",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
@@ -51,12 +53,15 @@
     "compression": "^1.7.4",
     "crypto": "^1.0.1",
     "helmet": "^7.1.0",
+    "kafkajs": "^2.2.4",
     "moment": "^2.30.1",
+    "nest-winston": "^1.9.7",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "winston": "^3.14.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.4.1",
@@ -111,8 +116,8 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/src/",
-      "<rootDir>/libs/"
+      "<rootDir>/libs/",
+      "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
       "^@app/prisma-user(|/.*)$": "<rootDir>/libs/prisma-user/src/$1",
