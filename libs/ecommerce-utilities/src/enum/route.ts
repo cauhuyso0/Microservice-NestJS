@@ -36,6 +36,9 @@ enum API_TAGS {
 }
 
 export const ROUTES = {
+  NOTIFICATION: {
+    API_DOC: `${APPS_CONTEXT.NOTIFICATION}/docs`,
+  },
   USER: {
     API_DOC: `${APPS_CONTEXT.USER}/docs`,
     AUTH: {

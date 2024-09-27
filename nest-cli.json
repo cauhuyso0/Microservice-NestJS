@@ -109,6 +109,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/prisma-auth/tsconfig.lib.json"
       }
+    },
+    "log": {
+      "type": "application",
+      "root": "apps/log",
+      "entryFile": "main",
+      "sourceRoot": "apps/log/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/log/tsconfig.app.json"
+      }
     }
   }
 }

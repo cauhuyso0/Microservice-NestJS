@@ -17,7 +17,6 @@ export interface PaginationDto {
 
 export interface UpdateUserDto {
   id: string;
-  socialMedia: SocialMedia | undefined;
 }
 
 export interface FindOneUserDto {
@@ -26,6 +25,7 @@ export interface FindOneUserDto {
 
 export interface CheckAuthDto {
   accessToken: string;
+  clientId: string;
 }
 
 export interface ReturnCheckAuth {
@@ -36,12 +36,6 @@ export interface Empty {}
 
 export interface Users {
   users: User[];
-}
-
-export interface CreateUserDto {
-  username: string;
-  password: string;
-  age: number;
 }
 
 export interface User {
@@ -63,8 +57,6 @@ export const USER_PACKAGE_NAME = 'user';
 export interface UsersServiceClient {
   checkAuth(request: CheckAuthDto): Observable<ReturnCheckAuth>;
 
-  createUser(request: CreateUserDto): Observable<User>;
-
   findAllUsers(request: Empty): Observable<Users>;
 
   findOneUser(request: FindOneUserDto): Observable<User>;
@@ -78,8 +70,6 @@ export interface UsersServiceController {
   checkAuth(
     request: CheckAuthDto,
   ): Promise<ReturnCheckAuth> | Observable<ReturnCheckAuth> | ReturnCheckAuth;
-
-  createUser(request: CreateUserDto): Promise<User> | Observable<User> | User;
 
   findAllUsers(request: Empty): Promise<Users> | Observable<Users> | Users;
 

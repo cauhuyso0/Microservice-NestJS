@@ -28,18 +28,20 @@ async function bootstrap() {
     logger: ['error', 'warn', 'debug'],
   });
 
+  const configService = app.get(ConfigService);
+
+  const gRPCUrl = configService.get<string>(CONFIGURATION.GRPC_URL);
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      url: '0.0.0.0:3001',
+      url: gRPCUrl,
       package: 'user',
       protoPath: join('node_modules/grpc-nest-proto/proto/user.proto'),
     },
   });
 
   await app.startAllMicroservices();
-
-  const configService = app.get(ConfigService);
 
   app.use(compression());
 

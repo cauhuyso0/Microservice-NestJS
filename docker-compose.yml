@@ -47,8 +47,31 @@ services:
       - ./docker/mongodb/mongodb_data:/data/db
       - ./docker/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKAJS_NO_PARTITIONER_WARNING: 1
+    ports:
+      - 9092:9092
+
 volumes:
   postgres:
     driver: local
   mysql:
     driver: local
+
+networks:
+  e-commerce:
+    driver: bridge
