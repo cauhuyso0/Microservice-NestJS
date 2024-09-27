@@ -6,9 +6,16 @@ import { AbstractController } from '../../abstract';
 import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
-import { MODEL_NAME, ROUTES } from '../../utilities';
+import {
+  FindOneUserDto,
+  MODEL_NAME,
+  ROUTES,
+  User,
+  USERS_SERVICE_NAME,
+} from '../../utilities';
 import { SignUpDto } from './dtos';
 import { JwtAccessTokenGuard } from '@apps/user/common';
+import { GrpcMethod } from '@nestjs/microservices';
 
 const { ROUTE, TAG } = ROUTES.USER.USER;
 @Controller()
@@ -36,5 +43,12 @@ export class UserController extends AbstractController<
   @Put(ROUTE.BASE)
   updatePassword() {
     return '';
+  }
+
+  @GrpcMethod(USERS_SERVICE_NAME, 'FindOneUser')
+  private findOneUser(payload: FindOneUserDto): Promise<User> {
+    console.log('GRPC finOneUser ========', payload);
+
+    return this.service.findOneUser(payload);
   }
 }

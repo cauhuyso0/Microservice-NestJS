@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -30,8 +31,9 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
+      url: '0.0.0.0:3001',
       package: 'user',
-      protoPath: 'proto/user.proto',
+      protoPath: join('node_modules/grpc-nest-proto/proto/user.proto'),
     },
   });
 

@@ -10,7 +10,7 @@ export class AuthController {
 
   @GrpcMethod(AUTH_SERVICE_NAME, 'Validate')
   private validate(payload: ValidateRequestDto): Promise<ValidateResponse> {
-    console.log(payload);
+    console.log('Validate:====', payload);
 
     return this.authService.validate(payload);
   }
