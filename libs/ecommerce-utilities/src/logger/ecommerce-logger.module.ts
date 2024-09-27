@@ -14,13 +14,13 @@ export class ECommerceLoggerModule {
           {
             name: 'LOG_SERVICE',
             imports: [ConfigModule],
-            useFactory: (_configService: ConfigService) => ({
+            useFactory: (configService: ConfigService) => ({
               transport: Transport.KAFKA,
               options: {
                 client: {
                   clientId: 'e_commerce_logger',
-                  // brokers: [configService.get<string>('KAFKA_BROKER_URL')],
-                  brokers: ['localhost:9092'],
+                  brokers: [configService.get<string>('KAFKA_BROKER_URL')],
+                  // brokers: ['localhost:9092'],
                 },
                 consumer: {
                   groupId: 'log-consumer',
