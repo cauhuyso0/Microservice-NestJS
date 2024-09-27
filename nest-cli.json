@@ -14,7 +14,9 @@
       "sourceRoot": "apps/user/src",
       "compilerOptions": {
         "tsConfigPath": "apps/user/tsconfig.app.json",
-        "assets": ["**/*.proto"],
+        "assets": [
+          "**/*.proto"
+        ],
         "watchAssets": true
       }
     },
@@ -79,6 +81,33 @@
       "sourceRoot": "libs/ecommerce-utilities/src",
       "compilerOptions": {
         "tsConfigPath": "libs/ecommerce-utilities/tsconfig.lib.json"
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "libs/prisma-auth": {
+      "type": "library",
+      "root": "libs/libs/prisma-auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/libs/prisma-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/libs/prisma-auth/tsconfig.lib.json"
+      }
+    },
+    "prisma-auth": {
+      "type": "library",
+      "root": "libs/prisma-auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma-auth/tsconfig.lib.json"
       }
     }
   }

@@ -6,6 +6,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=user
     ports:
       - '5432:5432'
     volumes:
@@ -31,11 +32,12 @@ services:
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   mongodb:
+    container_name: auth_mongodb
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 12345678
-      MONGO_INITDB_DATABASE: product
+      MONGO_INITDB_DATABASE: auth
     command:
       - '--logpath'
       - '/var/log/mongodb/mongod.log'

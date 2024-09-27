@@ -6,6 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "proto:install": "npm i https://github.com/cauhuyso0/gRPC-proto.git",
+    "proto:auth": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto.cmd -I=./node_modules/grpc-nest-proto/proto --ts_proto_out=apps/auth/src/utilities/ node_modules/grpc-nest-proto/proto/auth.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
+    "proto:user": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto.cmd -I=./node_modules/grpc-nest-proto/proto --ts_proto_out=apps/user/src/utilities/ node_modules/grpc-nest-proto/proto/user.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
     "proto:dev:user": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto --ts_proto_out=apps/user/src/utilities proto/user.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
     "proto:dev": "npm run proto:dev:user",
     "prisma:migrate:user": "prisma migrate dev --schema libs/prisma-user/prisma/schema.prisma",
@@ -13,22 +16,24 @@
     "prisma:migrate": "npm run prisma:migrate:user && npm run prisma:migrate:order",
     "prisma:generate:user": "prisma generate --schema libs/prisma-user/prisma/schema.prisma",
     "prisma:generate:order": "prisma generate --schema libs/prisma-order/prisma/schema.prisma",
-    "prisma:generate": "npm run prisma:generate:user && npm run prisma:generate:order",
+    "prisma:generate:auth": "prisma generate --schema libs/prisma-auth/prisma/schema.prisma",
+    "prisma:generate": "npm run prisma:generate:user && npm run prisma:generate:order && npm run prisma:generate:auth",
     "start:dev:notification": "nest start --watch notification",
     "start:dev:order": "nest start --watch order",
     "start:dev:payment": "nest start --watch payment",
     "start:dev:product": "nest start --watch product",
     "start:dev:user": "nest start --watch user",
+    "start:dev:auth": "nest start --watch auth",
     "build": "nest build",
     "start": "nest start",
     "start:dev": "npm run prisma:generate && concurrently -c \"cyan.bold,red.bold,blue.bold,green.bold,yellow.bold\" \"npm:start:dev:*\" ",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/apps/microservice-nest-js/main",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --config ./apps/microservice-nest-js/test/jest-e2e.json",
     "prepare": "test -d node_modules/husky && husky install || echo \"husky is not installed\"",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
@@ -50,6 +55,7 @@
     "class-validator": "^0.14.1",
     "compression": "^1.7.4",
     "crypto": "^1.0.1",
+    "grpc-nest-proto": "github:cauhuyso0/gRPC-proto",
     "helmet": "^7.1.0",
     "moment": "^2.30.1",
     "passport-jwt": "^4.0.1",
@@ -111,13 +117,15 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/src/",
-      "<rootDir>/libs/"
+      "<rootDir>/libs/",
+      "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
       "^@app/prisma-user(|/.*)$": "<rootDir>/libs/prisma-user/src/$1",
       "^@app/prisma-order(|/.*)$": "<rootDir>/libs/prisma-order/src/$1",
-      "^@app/ecommerce-utilities(|/.*)$": "<rootDir>/libs/ecommerce-utilities/src/$1"
+      "^@app/ecommerce-utilities(|/.*)$": "<rootDir>/libs/ecommerce-utilities/src/$1",
+      "^@app/libs/prisma-auth(|/.*)$": "<rootDir>/libs/libs/prisma-auth/src/$1",
+      "^@app/prisma-auth(|/.*)$": "<rootDir>/libs/prisma-auth/src/$1"
     }
   }
 }

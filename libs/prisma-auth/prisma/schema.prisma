@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+  output          = "../../../node_modules/@prisma/db-auth"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_AUTH_URL")
+}
+
+
+model KeyToken {
+  clientId         String @id @default(auto()) @map("_id") @db.ObjectId
+  userId           Int       @map("user_id")
+  publicKey        String    @map("public_key")
+  publicKeyRefresh String    @map("public_key_refresh")
+  refreshToken     String    @map("refresh_token")
+  refreshTokens    String[]  @map("refresh_tokens")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@map("key_token")
+}
