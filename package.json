@@ -14,6 +14,7 @@
     "prisma:generate:user": "prisma generate --schema libs/prisma-user/prisma/schema.prisma",
     "prisma:generate:order": "prisma generate --schema libs/prisma-order/prisma/schema.prisma",
     "prisma:generate": "npm run prisma:generate:user && npm run prisma:generate:order",
+    "start:dev:log": "nest start --watch log",
     "start:dev:notification": "nest start --watch notification",
     "start:dev:order": "nest start --watch order",
     "start:dev:payment": "nest start --watch payment",

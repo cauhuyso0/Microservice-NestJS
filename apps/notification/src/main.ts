@@ -25,9 +25,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const gRPCUrl = configService.get<string>(CONFIGURATION.GRPC_URL);
-  const kafkaBrokerUrl = configService.get<string>(
-    CONFIGURATION.KAFKA_BROKER_URL,
-  );
+  // const kafkaBrokerUrl = configService.get<string>(
+  //   CONFIGURATION.KAFKA_BROKER_URL,
+  // );
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
@@ -38,18 +38,18 @@ async function bootstrap() {
     },
   });
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        clientId: 'notification-service',
-        brokers: [kafkaBrokerUrl],
-      },
-      consumer: {
-        groupId: 'mail-consumer',
-      },
-    },
-  });
+  // app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.KAFKA,
+  //   options: {
+  //     client: {
+  //       clientId: 'notification-service',
+  //       brokers: [kafkaBrokerUrl],
+  //     },
+  //     consumer: {
+  //       groupId: 'mail-consumer',
+  //     },
+  //   },
+  // });
 
   await app.startAllMicroservices();
 

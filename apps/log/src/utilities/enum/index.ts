@@ -1,0 +1,11 @@
+export enum CONFIGURATION {
+  // environment
+  NODE_ENV = 'NODE_ENV',
+
+  // gRPC
+  GRPC_URL = 'GRPC_URL',
+
+  // Kafka
+  KAFKA_BROKER_URL = 'KAFKA_BROKER_URL',
+  CONSUMER_GROUP_ID = 'CONSUMER_GROUP_ID',
+}

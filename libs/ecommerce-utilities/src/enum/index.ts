@@ -1,5 +1,6 @@
 export * from './route';
 export * from './error-dictionary';
+export * from './event-log';
 
 export enum APPS_NAME {
   USER = 'User service',
