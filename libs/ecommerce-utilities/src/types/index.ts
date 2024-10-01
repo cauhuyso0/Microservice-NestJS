@@ -1,3 +1,5 @@
+export * from './logger.type';
+
 export type AccessTokenPayload = {
   userId: number;
   email: string;

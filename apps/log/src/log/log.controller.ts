@@ -1,82 +1,47 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { EVENT_LOG } from '@lib/ecommerce-utilities';
+import {
+  DebugOutput,
+  ErrorOutput,
+  LogOutput,
+  VerboseOutput,
+  WarnOutput,
+  EVENT_LOG,
+  FatalOutput,
+} from '@lib/ecommerce-utilities';
+import { LogService } from './log.service';
 
 @Controller()
 export class LogController {
-  constructor() {}
+  constructor(private readonly logService: LogService) {}
 
   @MessagePattern(EVENT_LOG.DEBUG)
-  debug(@Payload() message: any): any {
-    console.log('object');
-    console.log('object :', message);
-    console.log('object');
-    console.log('object');
-    console.log('object');
-    console.log('object');
-    console.log('object');
-    console.log('object');
-    const dragonId = message.dragonId;
-    console.log(dragonId);
-    const items = [
-      { id: 1, name: 'Mythical Sword' },
-      { id: 2, name: 'Key to Dungeon' },
-    ];
-    return items;
+  debug(@Payload() message: DebugOutput): void {
+    this.logService.debug(message);
   }
 
   @MessagePattern(EVENT_LOG.ERROR)
-  error(@Payload() message: any): any {
-    const dragonId = message.dragonId;
-    console.log(dragonId);
-    const items = [
-      { id: 1, name: 'Mythical Sword' },
-      { id: 2, name: 'Key to Dungeon' },
-    ];
-    return items;
+  error(@Payload() message: ErrorOutput): void {
+    this.logService.error(message);
   }
 
   @MessagePattern(EVENT_LOG.FATAL)
-  fatal(@Payload() message: any): any {
-    const dragonId = message.dragonId;
-    console.log(dragonId);
-    const items = [
-      { id: 1, name: 'Mythical Sword' },
-      { id: 2, name: 'Key to Dungeon' },
-    ];
-    return items;
+  fatal(@Payload() message: FatalOutput): void {
+    this.logService.fatal(message);
   }
 
   @MessagePattern(EVENT_LOG.LOG)
-  log(@Payload() message: any): any {
-    const dragonId = message.dragonId;
-    console.log(dragonId);
-    const items = [
-      { id: 1, name: 'Mythical Sword' },
-      { id: 2, name: 'Key to Dungeon' },
-    ];
-    return items;
+  log(@Payload() message: LogOutput): void {
+    this.logService.log(message);
   }
 
   @MessagePattern(EVENT_LOG.VERBOSE)
-  verbose(@Payload() message: any): any {
-    const dragonId = message.dragonId;
-    console.log(dragonId);
-    const items = [
-      { id: 1, name: 'Mythical Sword' },
-      { id: 2, name: 'Key to Dungeon' },
-    ];
-    return items;
+  verbose(@Payload() message: VerboseOutput): void {
+    this.logService.verbose(message);
   }
 
   @MessagePattern(EVENT_LOG.WARN)
-  warn(@Payload() message: any): any {
-    const dragonId = message.dragonId;
-    console.log(dragonId);
-    const items = [
-      { id: 1, name: 'Mythical Sword' },
-      { id: 2, name: 'Key to Dungeon' },
-    ];
-    return items;
+  warn(@Payload() message: WarnOutput): void {
+    this.logService.warn(message);
   }
 }

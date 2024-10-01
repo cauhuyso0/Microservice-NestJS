@@ -8,6 +8,7 @@ import { AuthEntity } from './entities/auth.entity';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
   async validateAccessToken({ userId, clientId }) {
+    console.log(userId, clientId);
     const publicKey = 'ok bro';
 
     return publicKey;

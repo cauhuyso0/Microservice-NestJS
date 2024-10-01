@@ -20,7 +20,6 @@ export class ECommerceLoggerModule {
                 client: {
                   clientId: 'e_commerce_logger',
                   brokers: [configService.get<string>('KAFKA_BROKER_URL')],
-                  // brokers: ['localhost:9092'],
                 },
                 consumer: {
                   groupId: 'log-consumer',

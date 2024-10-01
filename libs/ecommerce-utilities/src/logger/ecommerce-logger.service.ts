@@ -1,95 +1,76 @@
-import { LoggerService, Injectable, Inject } from '@nestjs/common';
+import { Logger, Injectable, Inject } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { EVENT_LOG } from '../enum/event-log';
 
 @Injectable()
-export class ECommerceLogger implements LoggerService {
+export class ECommerceLogger extends Logger {
   constructor(
     @Inject('LOG_SERVICE') private readonly logClient: ClientKafka,
     @Inject('APP_NAME') private readonly appName: string,
-  ) {}
+  ) {
+    super();
+  }
   /**
    * Write a 'log' level log.
    */
-  log(message: any, ...optionalParams: any[]) {
-    this.logClient.emit(EVENT_LOG.LOG, {
-      appName: this.appName,
-      message,
-      optionalParams,
-    });
+  log(message: any, context?: string) {
+    this.logClient.emit(
+      EVENT_LOG.LOG,
+      JSON.stringify({ appName: this.appName, message, context }),
+    );
   }
 
   /**
    * Write a 'fatal' level log.
    */
-  fatal(message: any, ...optionalParams: any[]) {
-    this.logClient.emit(EVENT_LOG.FATAL, {
-      appName: this.appName,
-      message,
-      optionalParams,
-    });
+  fatal(message: any, context?: string) {
+    this.logClient.emit(
+      EVENT_LOG.FATAL,
+      JSON.stringify({ appName: this.appName, message, context }),
+    );
   }
 
   /**
    * Write an 'error' level log.
    */
-  error(message: any, ...optionalParams: any[]) {
-    this.logClient.emit(EVENT_LOG.ERROR, {
-      appName: this.appName,
-      message,
-      optionalParams,
-    });
+  error(message: any, trace?: string, context?: string) {
+    this.logClient.emit(
+      EVENT_LOG.ERROR,
+      JSON.stringify({ appName: this.appName, message, trace, context }),
+    );
   }
 
   /**
    * Write a 'warn' level log.
    */
-  warn(message: any, ...optionalParams: any[]) {
-    this.logClient.emit(EVENT_LOG.WARN, {
-      appName: this.appName,
-      message,
-      optionalParams,
-    });
+  warn(message: any, context?: string) {
+    this.logClient.emit(
+      EVENT_LOG.WARN,
+      JSON.stringify({ appName: this.appName, message, context }),
+    );
   }
 
   /**
    * Write a 'debug' level log.
    */
-  async debug(message: any, ...optionalParams: any[]) {
-    console.log('hello');
-    // console.log(this.logClient);
-    try {
-      this.logClient.send(
-        EVENT_LOG.DEBUG,
-        JSON.stringify({
-          appName: this.appName,
-          message,
-          optionalParams,
-        }),
-      );
-      console.log('success');
-    } catch (error) {
-      console.log('error :', error);
-    }
-
-    // console.log(data);
+  debug(message: any, context?: string) {
+    this.logClient.emit(
+      EVENT_LOG.DEBUG,
+      JSON.stringify({
+        appName: this.appName,
+        message,
+        context,
+      }),
+    );
   }
 
   /**
    * Write a 'verbose' level log.
    */
-  verbose(message: any, ...optionalParams: any[]) {
-    this.logClient.emit(EVENT_LOG.LOG, {
-      appName: this.appName,
-      message,
-      optionalParams,
-    });
+  verbose(message: any, context?: string) {
+    this.logClient.emit(
+      EVENT_LOG.LOG,
+      JSON.stringify({ appName: this.appName, message, context }),
+    );
   }
-
-  // async onModuleInit() {
-  //   // Need to subscribe to topic
-  //   // so that we can get the response from kafka microservice
-  //   this.logClient.subscribeToResponseOf(EVENT_LOG.DEBUG);
-  //   await this.logClient.connect();
-  // }
 }

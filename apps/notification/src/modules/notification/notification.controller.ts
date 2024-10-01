@@ -7,7 +7,7 @@ export class NotificationController {
 
   @Get()
   getHello(): string {
-    this.logger.debug('sdda', ['as']);
+    this.logger.error('sdda', 'as');
     return 'this.paymentService.getHello()';
   }
 }

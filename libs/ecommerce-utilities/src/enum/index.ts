@@ -8,6 +8,7 @@ export enum APPS_NAME {
   ORDER = 'Order service',
   NOTIFICATION = 'Notification service',
   PAYMENT = 'Payment service',
+  AUTH = 'Auth service',
 }
 
 export enum E_NODE_ENV {

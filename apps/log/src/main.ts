@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     LogAppModule,
     {
-      logger: LoggerFactory('MyApp'),
+      logger: LoggerFactory(),
       transport: Transport.KAFKA,
       options: {
         client: {
@@ -15,10 +15,10 @@ async function bootstrap() {
         },
         consumer: {
           groupId: 'log-consumer',
-          sessionTimeout: 60000,
-          heartbeatInterval: 40000,
-          maxWaitTimeInMs: 43000,
-          retry: { retries: 30 },
+          // sessionTimeout: 60000,
+          // heartbeatInterval: 40000,
+          // maxWaitTimeInMs: 43000,
+          // retry: { retries: 30 },
         },
       },
     },

@@ -1,14 +1,17 @@
 {
   "cSpell.words": [
+    "cauhuyso",
     "commitlint",
     "datasource",
     "dtos",
     "ecommerce",
+    "kafkajs",
     "proto",
     "protobuf",
     "protoc",
     "Uncapitalize",
-    "vegardit"
+    "vegardit",
+    "websockets"
   ],
   "[javascript]": {
     "editor.autoIndent": "keep"
