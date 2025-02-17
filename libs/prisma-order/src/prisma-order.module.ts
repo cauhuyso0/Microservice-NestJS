@@ -1,8 +1,38 @@
-import { Module } from '@nestjs/common';
-import { PrismaOrderService } from './prisma-order.service';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
+import { PrismaClientService } from './prisma-order.service';
+import { ConfigDB } from './type';
 
-@Module({
-  providers: [PrismaOrderService],
-  exports: [PrismaOrderService],
-})
-export class PrismaOrderModule {}
+@Module({})
+export class PrismaOrderModule {
+  static register(config: ConfigDB): DynamicModule {
+    return {
+      global: true,
+      module: PrismaOrderModule,
+      providers: [
+        PrismaClientService,
+        {
+          provide: 'CONFIG_DB',
+          useValue: config,
+        },
+        Logger,
+      ],
+      exports: [PrismaClientService],
+    };
+  }
+
+  static forRoot(config: ConfigDB): DynamicModule {
+    return {
+      global: true,
+      module: PrismaOrderModule,
+      providers: [
+        PrismaClientService,
+        {
+          provide: 'CONFIG_DB',
+          useValue: config,
+        },
+        Logger,
+      ],
+      exports: [PrismaClientService],
+    };
+  }
+}

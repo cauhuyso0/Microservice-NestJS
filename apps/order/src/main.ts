@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 // import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
-import { OrderModule } from './order.module';
+import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(OrderModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     logger: ['error', 'warn'],
   });

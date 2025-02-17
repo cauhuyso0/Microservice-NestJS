@@ -66,12 +66,61 @@ services:
     ports:
       - 9092:9092
 
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - xpack.security.enabled=false # Tắt bảo mật
+      - xpack.security.transport.ssl.enabled=false # Tắt SSL transport
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - xpack.security.enabled=false # Tắt bảo mật
+      - xpack.security.transport.ssl.enabled=false # Tắt SSL transport
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
 volumes:
   postgres:
     driver: local
   mysql:
     driver: local
+  data01:
+    driver: local
+  data02:
+    driver: local
 
 networks:
   e-commerce:
+    driver: bridge
+  elastic:
     driver: bridge

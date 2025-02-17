@@ -1,6 +1,6 @@
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_ORDER_URL")
 }
 
 generator client {
@@ -9,45 +9,37 @@ generator client {
   output          = "../../../node_modules/@prisma/db-order"
 }
 
-enum UserStatus {
-  ACTIVE
-  INACTIVE
+model Order {
+  id            Int         @id @default(autoincrement())
+  amount        Int         @default(0)
+  orderStatusId Int         @map("order_status_id")
+  userId        Int         @map("user_id")
+  status        OrderStatus @relation(fields: [orderStatusId], references: [id])
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  deletedAt     DateTime?   @map("deleted_at")
+
+  @@map("order")
 }
 
-model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  name      String?
-  password  String?
-  status    UserStatus @default(INACTIVE)
-  verfify   Boolean    @default(false)
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
-  deletedAt DateTime?  @map("deleted_at")
-
-  @@map("user")
-}
-
-model Role {
-  id          Int          @id @default(autoincrement())
-  name        String
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  deletedAt   DateTime?    @map("deleted_at")
-  permissions Permission[]
-
-  @@map("role")
-}
-
-model Permission {
-  id          Int       @id @default(autoincrement()) @map("id")
-  value       String    @unique @map("value") @db.VarChar(45)
-  name        String?   @map("name") @db.VarChar(45)
-  description String?   @map("description") @db.VarChar(100)
+model OrderItem {
+  id          Int       @id @default(autoincrement())
+  amount      Int       @default(0)
+  serviceName String    @map("service_name")
+  order       Order     @relation(fields: [orderId], references: [id])
+  orderId     Int       @map("order_id")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
-  roles       Role[]
 
-  @@map("permission")
+  @@map("order_item")
+}
+
+model OrderStatus {
+  id    Int     @id @default(autoincrement())
+  name  String  @default("Initial")
+  Order Order[]
+
+  @@map("order_status")
 }
